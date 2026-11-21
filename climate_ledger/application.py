@@ -139,3 +139,15 @@ class Application:
         with self.ledger.transaction():
             watermark = self.ledger.watermark() if seq is None else integer(seq, "seq")
             return {"watermark": watermark, **Exposure(self.ledger.snapshot(watermark)).priorities(spec)}
+
+    def compound(self, spec, *, seq=None):
+        from .analysis.compound import Compound
+        with self.ledger.transaction():
+            watermark = self.ledger.watermark() if seq is None else integer(seq, "seq")
+            return {"watermark": watermark, **Compound(self.ledger.snapshot(watermark)).analyze(spec)}
+
+    def compound_plan(self, spec, *, seq=None):
+        from .analysis.compound import CompoundPlan
+        with self.ledger.transaction():
+            watermark = self.ledger.watermark() if seq is None else integer(seq, "seq")
+            return {"watermark": watermark, **CompoundPlan(self.ledger.snapshot(watermark)).plan(spec)}

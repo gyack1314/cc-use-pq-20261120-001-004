@@ -15,6 +15,8 @@ python -m climate_ledger --database city.sqlite3 plan examples/portfolio.json
 python -m climate_ledger --database city.sqlite3 equity examples/exposure.json
 python -m climate_ledger --database city.sqlite3 priorities examples/exposure.json
 python -m climate_ledger --database city.sqlite3 diagnose examples/exposure.json
+python -m climate_ledger --database city.sqlite3 compound examples/compound.json
+python -m climate_ledger --database city.sqlite3 compound-plan examples/compound_plan.json
 python -m climate_ledger --database city.sqlite3 audit
 ```
 
@@ -32,8 +34,10 @@ python -m climate_ledger --database city.sqlite3 audit
 
 比较研究在前后两期内分别按同日、天气差容限寻找对照，同阶段的对照区日最多使用一次。对照存在行动、前期行动区已启用、后期行动区尚未启用、人口为零或资料不完整的日期会排除并说明原因。估计是后期和前期配对单位人口负担差的变化，配对不足不出数值。候选行动组合以实际联合保护结果比较，遵守预算和设施承诺，已保护群体不重复计效。组合结果只是假设，不修改已入账行动；一次最多比较16个候选。
 
+`compound` 处理热旱复合暴露，不修改任何单指标口径：温度与水量保留各自原始暴露结果，摄氏度与升数从不相加，也不产生掩盖资料不确定性的综合分数。热事件按同区连续危险日识别，热危险确认结束后的两日仍属恢复期；缺水日只有落在热事件或恢复期内才算复合暴露。缺测日既不当安全日结束事件，也不证明事件继续，而是把可确认部分与可能相连的边界同时给出（前段右边界 `unknown`、后段左边界 `possible_link`）。联合人口按互斥群体登记同日受热、缺水及交集人数，系统校验其与人口分母、观测危险标志相容；同一人同一天只进入一次联合分母，单独高温、单独缺水、同时危险和恢复期遇缺水可相互核对。只给两个总数而未给交集时，用 Fréchet 可行上下界表达，不假定完全重合或完全独立，也不折算成确定保护数。查询可声明设施每日总服务容量、每项服务适用的危险与每人占用名额：联合服务一人占两份名额，同一居民不会在两类行动中各扣一次；跨服务共享设施时，独立指标的保护容量不能各自全额使用。`compound-plan` 按联合服务的实际可行性评价预算候选，交集或事件连接未知时只比较保护下界并标明排名不确定，假设组合不写入总账。单项读数更正会按同一资料解释重算事件连接、复合资格与服务需求，旧水位结果与旧发布文件仍可复现；没有完整联合依据时，结果明确标注部分未知，不给出看似完整的总效益。
+
 `draft` 根据分析条件生成草稿并绑定入账水位、资料清单和摘要，独立审核人用摘要确认后才允许 `publish`。分析不完整、无有效人口或研究配对不足时不能审核发布。资料更新使所有旧草稿过期；旧发布内容仍保留，并标明不再是当前资料。专题发布需要提供期望的前序编号，避免覆盖别人刚签发的版本。`export` 以原子替换写出发布文件，`verify` 检查内容摘要；这是文件完整性检查，不是数字签名或外部身份认证。
 
 `reconcile` 在相同分析条件下核对两个入账水位，说明哪些资料修订和区日结果变化，不能将该差异当作时间趋势。`export-csv` 导出资料快照，`ingest-csv` 可读单类资料，数组列使用 JSON 数组。`backup` 生成可直接重新打开的一致数据库副本，拒绝覆盖已有文件。`audit` 检查历史资料关联、修订顺序和发布证据链。数据账是本机受信文件；本工具没有网络账号系统，不应用于替代多人访问权限控制。
 
-目录中 `observatory/` 负责指标、站点和观测有效性，`residents.py` 负责人口分母，`adaptation.py` 负责行动资格和保护容量，`analysis/` 组织暴露、研究、组合与差异分析，`publication.py` 负责审核与专题发布，`ledger.py` 维护不可变修订，`application.py` 连接业务事务。测试按这些业务边界组织，包含跨边界更正、失败回滚、发布冲突和备份恢复。
+目录中 `observatory/` 负责指标、站点和观测有效性，`residents.py` 负责人口分母，`adaptation.py` 负责行动资格和保护容量，`analysis/` 组织暴露、研究、组合、复合与差异分析，`publication.py` 负责审核与专题发布，`ledger.py` 维护不可变修订，`application.py` 连接业务事务。测试按这些业务边界组织，包含跨边界更正、失败回滚、发布冲突和备份恢复。

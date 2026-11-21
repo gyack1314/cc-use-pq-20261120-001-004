@@ -1,0 +1,38 @@
+{
+  "heat_metric": "heat",
+  "water_metric": "water",
+  "zones": ["river", "hill"],
+  "start": "2026-07-01",
+  "end": "2026-07-04",
+  "minimum_coverage": "0.8",
+  "joint_population": [
+    {"zone": "river", "day": "2026-07-01", "group": "adult", "heat_affected": 80, "water_affected": 0, "intersection": 0},
+    {"zone": "river", "day": "2026-07-01", "group": "senior", "heat_affected": 20, "water_affected": 0, "intersection": 0},
+    {"zone": "river", "day": "2026-07-02", "group": "adult", "heat_affected": 80, "water_affected": 0, "intersection": 0},
+    {"zone": "river", "day": "2026-07-02", "group": "senior", "heat_affected": 20, "water_affected": 0, "intersection": 0},
+    {"zone": "river", "day": "2026-07-03", "group": "adult", "heat_affected": 80, "water_affected": 0, "intersection": 0},
+    {"zone": "river", "day": "2026-07-03", "group": "senior", "heat_affected": 20, "water_affected": 0, "intersection": 0},
+    {"zone": "river", "day": "2026-07-04", "group": "adult", "heat_affected": 80, "water_affected": 0, "intersection": 0},
+    {"zone": "river", "day": "2026-07-04", "group": "senior", "heat_affected": 20, "water_affected": 0, "intersection": 0},
+    {"zone": "hill", "day": "2026-07-01", "group": "adult", "heat_affected": 80, "water_affected": 0, "intersection": 0},
+    {"zone": "hill", "day": "2026-07-01", "group": "senior", "heat_affected": 20, "water_affected": 0, "intersection": 0},
+    {"zone": "hill", "day": "2026-07-02", "group": "adult", "heat_affected": 80, "water_affected": 0, "intersection": 0},
+    {"zone": "hill", "day": "2026-07-02", "group": "senior", "heat_affected": 20, "water_affected": 0, "intersection": 0},
+    {"zone": "hill", "day": "2026-07-03", "group": "adult", "heat_affected": 80, "water_affected": 0, "intersection": 0},
+    {"zone": "hill", "day": "2026-07-03", "group": "senior", "heat_affected": 20, "water_affected": 0, "intersection": 0},
+    {"zone": "hill", "day": "2026-07-04", "group": "adult", "heat_affected": 80, "water_affected": 0, "intersection": 0},
+    {"zone": "hill", "day": "2026-07-04", "group": "senior", "heat_affected": 20, "water_affected": 0, "intersection": 0}
+  ],
+  "facilities": [
+    {
+      "facility": "river-community-hub",
+      "zone": "river",
+      "daily_capacity": 10,
+      "services": [
+        {"service": "cooling", "hazards": ["heat"], "cost_per_person": 1, "groups": ["senior", "adult"], "priority": 20},
+        {"service": "water-supply", "hazards": ["water"], "cost_per_person": 1, "groups": ["senior", "adult"], "priority": 10},
+        {"service": "joint-relief", "hazards": ["heat", "water"], "cost_per_person": 2, "groups": ["senior", "adult"], "priority": 30}
+      ]
+    }
+  ]
+}

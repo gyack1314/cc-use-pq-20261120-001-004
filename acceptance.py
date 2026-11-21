@@ -24,6 +24,11 @@ def run():
             plan = app.plan(load("portfolio.json"))
             assert plan["selected"] == ["shared-river"]
             assert app.priorities(load("exposure.json"))["priorities"][0]["zone"] == "hill"
+            compound = app.compound(load("compound.json"))
+            assert compound["status"] == "qualified"
+            assert set(compound["single_indicator"]) == {"heat", "water"}
+            assert compound["joint_totals"]["confirmed"]["heat_only"] == 800
+            assert "joint_actions" in compound
             draft = app.draft("july", "heat-july", load("exposure.json"), "分析员")
             app.review("july", draft["digest"], "审核员")
             release = app.publish("july", "july-v1")
